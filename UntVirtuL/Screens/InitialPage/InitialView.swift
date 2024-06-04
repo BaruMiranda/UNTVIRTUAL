@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct InitialView: View {
+    
+    let homePageViewModel = HomePageViewModel()
+
     var body: some View {
         NavigationView {
             VStack {
@@ -39,7 +42,7 @@ struct InitialView: View {
                     .padding(.top, 25)
                     .padding(.bottom, 15)
                 
-                NavigationLink(destination: HomePageView()) {
+                NavigationLink(destination: HomePageView(viewModel: homePageViewModel)) {
                     HStack {
                         Image(systemName: "gear")
                             .foregroundColor(.white)

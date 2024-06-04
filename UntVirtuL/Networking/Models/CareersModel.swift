@@ -6,3 +6,15 @@
 //
 
 import Foundation
+
+struct CareersModel: Decodable, Hashable {
+    
+    let nameCareer: String
+    let description: String
+    
+    init(nameCareer: String, description: String) {
+        self.nameCareer = nameCareer
+        self.description = description
+    }
+    
+}

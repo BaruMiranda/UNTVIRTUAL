@@ -8,11 +8,18 @@
 import SwiftUI
 
 struct HomePageView: View {
+    
     @State private var showMenu = false
-    let images = ["img_v3", "img_v2", "img_v1"]
-    let items = ["Ciencias Agropecuarias", "Enfermería", "Ciencias Biológicas", "Farmacia y Bioquímica", "Ciencias Económicas", "Ingeniería", "Ciencias Físicas y Matemáticas", "Ingeniería Química", "Ciencias Sociales", "Medicina", "Derecho y Ciencias Políticas", " Estomatología", "Educación y Ciencias de la Comunicación"]
     @State private var currentIndex = 0
+    
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
+
+@StateObject var viewModel: HomePageViewModel
+    
+    init(viewModel: HomePageViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
+    
     var body: some View {
         VStack {
             Image("logo_principal")
@@ -21,8 +28,8 @@ struct HomePageView: View {
                 .frame(height: 100)
                 .padding()
             TabView(selection: $currentIndex) {
-                ForEach(images.indices, id: \.self) { index in
-                    Image(images[index])
+                ForEach(viewModel.fetchCarouselList.indices, id: \.self) { index in
+                    Image(viewModel.fetchCarouselList[index])
                         .resizable()
                         .scaledToFill()
                 }
@@ -30,7 +37,7 @@ struct HomePageView: View {
             .tabViewStyle(PageTabViewStyle())
             .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
             .onReceive(timer) { _ in
-                let newIndex = (currentIndex + 1) % images.count
+                let newIndex = (currentIndex + 1) % viewModel.fetchCarouselList.count
                 currentIndex = newIndex
             }
             VStack(alignment: .leading) {
@@ -41,7 +48,7 @@ struct HomePageView: View {
                                .padding(.leading, 20)
                 ScrollView {
                     LazyVGrid(columns: [GridItem(.flexible(), spacing: 20), GridItem(.flexible(), spacing: 20)], spacing: 20) {
-                        ForEach(items, id: \.self) { item in
+                        ForEach(viewModel.fetchCareers(), id: \.self) { item in
                             VStack {
                                 HStack {
                                     Image(systemName: "circle")
@@ -49,7 +56,7 @@ struct HomePageView: View {
                                         .aspectRatio(contentMode: .fit)
                                         .frame(width: 30, height: 30)
                                     
-                                    Text(item)
+                                    Text(item.nameCareer)
                                         .font(.headline)
                                         .foregroundColor(.blue)
                                     
