@@ -56,7 +56,7 @@ struct HomePageView: View {
                     ScrollView {
                         LazyVGrid(columns: [GridItem(.flexible(), spacing: 20), GridItem(.flexible(), spacing: 20)], spacing: 20) {
                             ForEach(viewModel.fetchCareers(), id: \.self) { item in
-                                VStack {
+                                VStack(alignment: .leading) {
                                     HStack {
                                         Image(item.nameIcon)
                                             .resizable()
@@ -65,13 +65,18 @@ struct HomePageView: View {
                                         
                                         Text(item.nameCareer)
                                             .font(.headline)
+                                            .padding(.horizontal)
                                             .foregroundColor(.blue)
                                         
                                     }
-                                    Text(item.description).font(.subheadline).foregroundColor(.gray).multilineTextAlignment(.center)
+                                    Text(item.description)
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+                                        .padding(.horizontal)
                                 }
                             }
                         }
+
                     }
                 }
                 .padding(.horizontal, 10)
