@@ -9,10 +9,16 @@ import Foundation
 
 struct CareersModel: Decodable, Hashable {
     
+    let nameIcon: String
     let nameCareer: String
     let description: String
     
-    init(nameCareer: String, description: String) {
+    init(
+        nameIcon: String,
+        nameCareer: String,
+        description: String
+    ) {
+        self.nameIcon = nameIcon
         self.nameCareer = nameCareer
         self.description = description
     }

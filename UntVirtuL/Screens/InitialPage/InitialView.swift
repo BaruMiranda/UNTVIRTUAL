@@ -58,6 +58,7 @@ struct InitialView: View {
                 Spacer()
             }
         }
+        .navigationBarBackButtonHidden(true) 
     }
 }
 

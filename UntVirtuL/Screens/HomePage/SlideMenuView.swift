@@ -9,6 +9,12 @@ import SwiftUI
 
 struct SlideMenuView: View {
     
+    @StateObject var viewModel: HomePageViewModel
+
+    init(viewModel: HomePageViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
+    
     // MARK: - View Body
     
     var body: some View {
@@ -24,8 +30,8 @@ struct SlideMenuView: View {
                     .blur(radius: 0.5)
                 ScrollView {
                     LazyVStack(spacing: 12) {
-                        ForEach(0..<4) { index in
-                            HomeListItemView(data: "items[index]", index: index, isLastItem: index == 4 - 1)
+                        ForEach(viewModel.fetchMenuList, id: \.self) { menuItem in
+                            HomeListItemView(data: menuItem, isLastItem: menuItem == viewModel.fetchMenuList.last)
                         }
                     }
                     .padding(10)
@@ -34,7 +40,7 @@ struct SlideMenuView: View {
             }
             .frame(width: geometry.size.width * 0.7)
             .padding(20)
-            .background(Color.blue)
+            .background(Color.black)
             .edgesIgnoringSafeArea(.bottom)
         }
     }
@@ -47,7 +53,6 @@ struct HomeListItemView: View {
     @State private var selectedOption: String?
 
     let data: String
-    let index: Int
     let isLastItem: Bool
     
     // MARK: - View Body
@@ -55,8 +60,11 @@ struct HomeListItemView: View {
     var body: some View {
         HStack {
             Image(systemName: "square.fill")
-                .foregroundColor(.white)
-            Text("\(data) \(index)")
+                .foregroundColor(.blue)
+            Text("\(data)")
+                .font(.title3)
+                .foregroundColor(Color.white)
+                .underline(color: Color.white)
             Spacer()
             if isLastItem {
                 Menu {
@@ -71,8 +79,11 @@ struct HomeListItemView: View {
                         Text("Materia 2")
                     }
                 } label: {
-                    Image(systemName: "square.fill")
-                        .foregroundColor(.white)
+                    Image("drop_dow")
+                        .resizable()
+                           .aspectRatio(contentMode: .fit)
+                           .frame(width: 15, height: 15)
+                        .background(.blue)
                         .contextMenu {
                             Text("Seleccionar opción")
                         }
@@ -87,8 +98,4 @@ struct HomeListItemView: View {
             }
         }
     }
-}
-
-#Preview {
-    SlideMenuView()
 }

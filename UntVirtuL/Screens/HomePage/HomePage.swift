@@ -12,6 +12,7 @@ struct HomePageView: View {
     // MARK: - View Properties
     
     @State private var showMenu = false
+    @State private var showMenuFloating = false
     @State private var currentIndex = 0
     
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
@@ -57,17 +58,17 @@ struct HomePageView: View {
                             ForEach(viewModel.fetchCareers(), id: \.self) { item in
                                 VStack {
                                     HStack {
-                                        Image(systemName: "circle")
+                                        Image(item.nameIcon)
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
-                                            .frame(width: 30, height: 30)
+                                            .frame(width: 15, height: 15)
                                         
                                         Text(item.nameCareer)
                                             .font(.headline)
                                             .foregroundColor(.blue)
                                         
                                     }
-                                    Text("Descripción del ítem").font(.subheadline).foregroundColor(.gray).multilineTextAlignment(.center)
+                                    Text(item.description).font(.subheadline).foregroundColor(.gray).multilineTextAlignment(.center)
                                 }
                             }
                         }
@@ -77,18 +78,28 @@ struct HomePageView: View {
             }
             GeometryReader { _ in
                 VStack {
-                    SlideMenuView()
-                        .frame(width: UIScreen.main.bounds.width * 0.7) 
+                    SlideMenuView(viewModel: viewModel)
+                        .frame(width: UIScreen.main.bounds.width * 0.7)
                         .offset(x: showMenu ? 0 : -UIScreen.main.bounds.width)
                         .animation(.easeInOut(duration: 0.5), value: showMenu)
                 }
-                .background(Color.blue.opacity(showMenu ? 1 : 0))
+                .background(Color.black.opacity(showMenu ? 1 : 0))
+            }
+            GeometryReader { _ in
+                HStack {
+                    Spacer()
+                    FloatingMenuView()
+                        .frame(width: UIScreen.main.bounds.width * 0.7)
+                        .offset(x: showMenuFloating ? 0 : UIScreen.main.bounds.width)
+                        .animation(.easeInOut(duration: 0.5), value: showMenuFloating)
+                }
             }
             .navigationBarTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(
                 leading: Button(action: {
                     self.showMenu.toggle()
+                    self.showMenuFloating = false
                 }) {
                     if showMenu {
                         Image(systemName: "xmark")
@@ -107,7 +118,9 @@ struct HomePageView: View {
                             .imageScale(.large)
                     }
                     Button(action: {
-                        
+                        self.showMenuFloating.toggle()
+                        self.showMenu = false
+
                     }) {
                         Image(systemName: "person.crop.circle")
                             .imageScale(.large)
