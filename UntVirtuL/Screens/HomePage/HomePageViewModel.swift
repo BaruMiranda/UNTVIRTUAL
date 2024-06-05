@@ -19,6 +19,11 @@ final class HomePageViewModel: ObservableObject {
         return imagesCarousel
     }
     
+    var fetchMenuList: [String] {
+        let itemsMenu = ["Área Personal", "img_v2", "img_v1"]
+        return itemsMenu
+    }
+    
     func fetchCareers() -> [CareersModel] {
         let careersListModel = [
             CareersModel(nameCareer: "Ciencias Agropecuarias", description: ""),
